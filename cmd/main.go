@@ -7,6 +7,7 @@ import (
 	"tentashiratori/templ-htmx/html"
 
 	"github.com/a-h/templ"
+	"github.com/gorilla/mux"
 )
 
 // 簡単なメモリ内タスクストレージ
@@ -20,24 +21,21 @@ var nextID = 4
 func main() {
 	// 静的ファイルの配信
 	fs := http.FileServer(http.Dir("static/"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	
+	router := mux.NewRouter()
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
 	// ホームページ
-	http.Handle("/", templ.Handler(html.Hello("World")))
-	
+	router.Handle("/", templ.Handler(html.Hello("World")))
 	// カウンター
-	http.Handle("/counter", templ.Handler(html.Counter(0)))
-	
+	router.Handle("/counter", templ.Handler(html.Counter(0)))
 	// タスク管理アプリ
-	http.Handle("/todo", templ.Handler(html.TodoApp()))
-	
+	router.Handle("/todo", templ.Handler(html.TodoApp()))
 	// HTMX API エンドポイント
-	http.HandleFunc("/add-task", addTask)
-	http.HandleFunc("/toggle-task/", toggleTask)
-	http.HandleFunc("/delete-task/", deleteTask)
+	router.HandleFunc("/add-task", addTask)
+	router.HandleFunc("/toggle-task/{id}", toggleTask)
+	router.HandleFunc("/delete-task/{id}", deleteTask)
 
 	fmt.Println("Listening on :3000")
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":3000", router)
 }
 
 func addTask(w http.ResponseWriter, r *http.Request) {

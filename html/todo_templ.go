@@ -118,11 +118,11 @@ func TaskItem(task Task) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 
-		class := "flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+		containerClass := "task-item flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
 		if task.Done {
-			class += " opacity-60"
+			containerClass += " opacity-60"
 		}
-		var templ_7745c5c3_Var4 = []any{class}
+		var templ_7745c5c3_Var4 = []any{containerClass}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -171,11 +171,11 @@ func TaskItem(task Task) templ.Component {
 			return templ_7745c5c3_Err
 		}
 
-		class := "flex-1 ml-3 text-gray-800 font-medium"
+		textClass := "flex-1 ml-3 text-gray-800 font-medium"
 		if task.Done {
-			class += " line-through text-gray-500"
+			textClass += " line-through text-gray-500"
 		}
-		var templ_7745c5c3_Var8 = []any{class}
+		var templ_7745c5c3_Var8 = []any{textClass}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var8...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -211,13 +211,13 @@ func TaskItem(task Task) templ.Component {
 			return templ_7745c5c3_Err
 		}
 
-		class := "px-3 py-1 text-sm rounded-md font-medium transition-colors"
+		buttonClass := "px-3 py-1 text-sm rounded-md font-medium transition-colors"
 		if task.Done {
-			class += " bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+			buttonClass += " bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
 		} else {
-			class += " bg-green-100 text-green-800 hover:bg-green-200"
+			buttonClass += " bg-green-100 text-green-800 hover:bg-green-200"
 		}
-		var templ_7745c5c3_Var11 = []any{class}
+		var templ_7745c5c3_Var11 = []any{buttonClass}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var11...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -248,7 +248,7 @@ func TaskItem(task Task) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" hx-target=\"closest div\" hx-swap=\"outerHTML\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" hx-target=\"closest .task-item\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -279,7 +279,7 @@ func TaskItem(task Task) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" hx-target=\"closest div\" hx-swap=\"outerHTML\" hx-confirm=\"このタスクを削除しますか？\">削除</button></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" hx-target=\"closest .task-item\" hx-swap=\"outerHTML\" hx-confirm=\"このタスクを削除しますか？\">削除</button></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

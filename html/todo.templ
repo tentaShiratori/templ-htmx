@@ -52,12 +52,12 @@ templ TaskList(tasks []Task) {
 
 templ TaskItem(task Task) {
 	{{
-		class := "flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+		containerClass := "task-item flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
 		if task.Done {
-			class += " opacity-60"
+			containerClass += " opacity-60"
 		}
 	}}
-	<div class={ class }>
+	<div class={ containerClass }>
 		<input
 			type="checkbox"
 			checked={ task.Done }
@@ -67,27 +67,27 @@ templ TaskItem(task Task) {
 			class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
 		/>
 		{{
-		class := "flex-1 ml-3 text-gray-800 font-medium"
+		textClass := "flex-1 ml-3 text-gray-800 font-medium"
 		if task.Done {
-			class += " line-through text-gray-500"
+			textClass += " line-through text-gray-500"
 		}
 		}}
-		<span class={ class }>
+		<span class={ textClass }>
 			{ task.Text }
 		</span>
 		<div class="flex gap-2 ml-4">
 			{{
-			class := "px-3 py-1 text-sm rounded-md font-medium transition-colors"
+			buttonClass := "px-3 py-1 text-sm rounded-md font-medium transition-colors"
 			if task.Done {
-				class += " bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+				buttonClass += " bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
 			} else {
-				class += " bg-green-100 text-green-800 hover:bg-green-200"
+				buttonClass += " bg-green-100 text-green-800 hover:bg-green-200"
 			}
 			}}
 			<button
-				class={ class }
+				class={ buttonClass }
 				hx-post={ fmt.Sprintf("/toggle-task/%d", task.ID) }
-				hx-target="closest div"
+				hx-target="closest .task-item"
 				hx-swap="outerHTML"
 			>
 				{{
@@ -101,7 +101,7 @@ templ TaskItem(task Task) {
 			<button
 				class="px-3 py-1 text-sm bg-red-100 text-red-800 rounded-md hover:bg-red-200 font-medium transition-colors"
 				hx-delete={ fmt.Sprintf("/delete-task/%d", task.ID) }
-				hx-target="closest div"
+				hx-target="closest .task-item"
 				hx-swap="outerHTML"
 				hx-confirm="このタスクを削除しますか？"
 			>

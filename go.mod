@@ -7,7 +7,10 @@ tool (
 	github.com/air-verse/air
 )
 
-require github.com/a-h/templ v0.3.943
+require (
+	github.com/a-h/templ v0.3.943
+	github.com/gorilla/mux v1.8.1
+)
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
