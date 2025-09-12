@@ -1,0 +1,112 @@
+package html
+
+import "fmt"
+
+type Task struct {
+	ID   int
+	Text string
+	Done bool
+}
+
+templ TodoApp() {
+	@Styles()
+	@Htmx()
+	<div class="min-h-screen bg-gray-50 py-8">
+		<div class="max-w-2xl mx-auto px-4">
+			<div class="bg-white rounded-lg shadow-lg p-6">
+				<h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">タスク管理アプリ</h1>
+				<form hx-post="/add-task" hx-target="#task-list" hx-swap="beforeend" class="mb-8">
+					<div class="flex gap-3">
+						<input
+							type="text"
+							name="task"
+							placeholder="新しいタスクを入力..."
+							required
+							class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+						/>
+						<button
+							type="submit"
+							class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
+						>
+							追加
+						</button>
+					</div>
+				</form>
+				<div id="task-list" class="space-y-3">
+					@TaskList([]Task{
+						{ID: 1, Text: "Goの学習", Done: false},
+						{ID: 2, Text: "Templの習得", Done: true},
+						{ID: 3, Text: "HTMXの理解", Done: false},
+					})
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ TaskList(tasks []Task) {
+	for _, task := range tasks {
+		@TaskItem(task)
+	}
+}
+
+templ TaskItem(task Task) {
+	{{
+		class := "flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+		if task.Done {
+			class += " opacity-60"
+		}
+	}}
+	<div class={ class }>
+		<input
+			type="checkbox"
+			checked={ task.Done }
+			hx-post={ fmt.Sprintf("/toggle-task/%d", task.ID) }
+			hx-target="closest div"
+			hx-swap="outerHTML"
+			class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+		/>
+		{{
+		class := "flex-1 ml-3 text-gray-800 font-medium"
+		if task.Done {
+			class += " line-through text-gray-500"
+		}
+		}}
+		<span class={ class }>
+			{ task.Text }
+		</span>
+		<div class="flex gap-2 ml-4">
+			{{
+			class := "px-3 py-1 text-sm rounded-md font-medium transition-colors"
+			if task.Done {
+				class += " bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+			} else {
+				class += " bg-green-100 text-green-800 hover:bg-green-200"
+			}
+			}}
+			<button
+				class={ class }
+				hx-post={ fmt.Sprintf("/toggle-task/%d", task.ID) }
+				hx-target="closest div"
+				hx-swap="outerHTML"
+			>
+				{{
+				body := "未完了"
+				if task.Done {
+					body = "完了"
+				}
+				}}
+				{ body }
+			</button>
+			<button
+				class="px-3 py-1 text-sm bg-red-100 text-red-800 rounded-md hover:bg-red-200 font-medium transition-colors"
+				hx-delete={ fmt.Sprintf("/delete-task/%d", task.ID) }
+				hx-target="closest div"
+				hx-swap="outerHTML"
+				hx-confirm="このタスクを削除しますか？"
+			>
+				削除
+			</button>
+		</div>
+	</div>
+}

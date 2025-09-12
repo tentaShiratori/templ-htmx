@@ -1,0 +1,9 @@
+package html
+
+var htmxHandle = templ.NewOnceHandle()
+
+templ Htmx() {
+	@htmxHandle.Once() {
+		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+	}
+}
